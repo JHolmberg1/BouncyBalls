@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        offset = new Vector3(player.position.x, player.position.y + 1.0f, player.position.z + 7.0f);
+        offset = new Vector3( 3.0f, 3.0f, 3.0f);
 
     }
 
@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour
     void LateUpdate()
     {
         offset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offset;
-        transform.position = player.position + offset;
+        transform.position = (player.position + offset);
         transform.LookAt(player.position);
     }
 }
