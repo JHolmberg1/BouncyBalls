@@ -14,11 +14,15 @@ public class PlayerController : MonoBehaviour
     float distToGround;
     public bool hardBrake = false;
     private bool cubed = false;
+    private bool speedUp = false;
     public ParticleSystem cubeParticle;
     public GameObject cubeForm;
     private Vector3 movement;
 
     private GameObject focalPoint;
+
+    float TimeDelay_Seconds = 3.0f;
+    float Timer;
 
     void Start()
     {
@@ -63,9 +67,15 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        if(rb.position.y < 0)
+        if (rb.position.y < 0)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        if (Timer < Time.realtimeSinceStartup && Input.GetKeyDown(KeyCode.Mouse1) && speedUp)
+        {
+            Timer = Time.realtimeSinceStartup + TimeDelay_Seconds;
+            rb.AddForce(focalPoint.transform.forward * speed * 2);
         }
     }
 
@@ -75,6 +85,10 @@ public class PlayerController : MonoBehaviour
             {
             hardBrake = true;
             }
+        if (collision.gameObject.CompareTag("SpeedUp"))
+        {
+            speedUp = true;
+        }
         
         
     }
