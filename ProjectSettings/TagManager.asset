@@ -8,6 +8,7 @@ TagManager:
   - HradBrake
   - Boost
   - SpeedUp
+  - victory
   layers:
   - Default
   - TransparentFX

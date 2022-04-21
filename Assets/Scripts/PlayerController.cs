@@ -17,7 +17,8 @@ public class PlayerController : MonoBehaviour
     private bool speedUp = false;
     public ParticleSystem cubeParticle;
     public GameObject cubeForm;
-    private Vector3 movement;
+    public bool victory = false;
+    public GameObject canvas;
 
     private GameObject focalPoint;
 
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1;
         focalPoint = GameObject.Find("Focal Point");
         rb = GetComponent<Rigidbody>();
         playerCollider = GetComponent<SphereCollider>();
@@ -75,21 +77,35 @@ public class PlayerController : MonoBehaviour
         if (Timer < Time.realtimeSinceStartup && Input.GetKeyDown(KeyCode.Mouse1) && speedUp)
         {
             Timer = Time.realtimeSinceStartup + TimeDelay_Seconds;
-            rb.AddForce(focalPoint.transform.forward * speed * 2);
+            rb.AddForce(focalPoint.transform.forward * speed * 4);
+        }
+
+        if (victory == true)
+        {
+            Time.timeScale = 0;
+            canvas.SetActive(true);
+        }
+
+        if (victory && Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
     public void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("HradBrake"))
-            {
+        {
             hardBrake = true;
-            }
+        }
         if (collision.gameObject.CompareTag("SpeedUp"))
         {
             speedUp = true;
         }
-        
+        if (collision.gameObject.CompareTag("victory"))
+        {
+            victory = true;
+        }
         
     }
 
