@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        offset = new Vector3( 3.0f, 3.0f, 3.0f);
+        offset = new Vector3( 4.0f, 3.5f, 3.0f);
 
     }
 

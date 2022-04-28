@@ -32,64 +32,23 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         playerCollider = GetComponent<SphereCollider>();
         distToGround = playerCollider.bounds.extents.y;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     void FixedUpdate()
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
-        rb.AddForce(focalPoint.transform.forward * moveVertical * speed * Time.deltaTime);
+        if (isGrounded)
+        {
+            rb.AddForce(focalPoint.transform.forward * moveVertical * speed * Time.deltaTime);
+        }
     }
     void Update()
     {
-        isGrounded = Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
-
-        if (Input.GetKeyDown(KeyCode.Mouse0) && hardBrake && !cubed)
-        {
-            rb.velocity = Vector3.down;
-            cubeParticle.Play();
-            cubeForm.SetActive(true);
-            Cooldown(2);
-            cubed = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.Mouse0) && cubed)
-        {
-            cubed = false;
-            cubeParticle.Play();
-            cubeForm.SetActive(false);
-        }
-
-        if (cubed == false)
-        {
-
-            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-            {
-                rb.AddForce(0, jump, 0, ForceMode.Impulse);
-            }
-        }
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        if (rb.position.y < 0)
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-
-        if (Timer < Time.realtimeSinceStartup && Input.GetKeyDown(KeyCode.Mouse1) && speedUp)
-        {
-            Timer = Time.realtimeSinceStartup + TimeDelay_Seconds;
-            rb.AddForce(focalPoint.transform.forward * speed * 4);
-        }
-
-        if (victory == true)
-        {
-            Time.timeScale = 0;
-            canvas.SetActive(true);
-        }
-
-        if (victory && Input.GetKeyDown(KeyCode.Escape))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
+        Jumping();
+        Abilitys();
+        Endgame();
     }
 
     public void OnCollisionEnter(Collision collision)
@@ -109,11 +68,55 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    IEnumerator Cooldown(int cooldown)
+    void Abilitys()
     {
-        yield return new WaitForSeconds(cooldown);
+        if (Input.GetKeyDown(KeyCode.Mouse0) && hardBrake && !cubed)
+        {
+            rb.velocity = Vector3.down;
+            cubeParticle.Play();
+            cubeForm.SetActive(true);
+            cubed = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.Mouse0) && cubed)
+        {
+            cubed = false;
+            cubeParticle.Play();
+            cubeForm.SetActive(false);
+        }
+
+        if (Timer < Time.realtimeSinceStartup && Input.GetKeyDown(KeyCode.Mouse1) && speedUp)
+        {
+            Timer = Time.realtimeSinceStartup + TimeDelay_Seconds;
+            rb.AddForce(focalPoint.transform.forward * speed * 4);
+        }
     }
 
+    void Endgame()
+    {
+        if (victory == true)
+        {
+            Time.timeScale = 0;
+            canvas.SetActive(true);
+        }
 
+        if (victory && Input.GetKeyDown(KeyCode.Escape) || rb.position.y < 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
+
+    void Jumping()
+    {
+        isGrounded = Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
+
+        if (cubed == false)
+        {
+
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            {
+                rb.AddForce(0, jump, 0, ForceMode.Impulse);
+            }
+        }
+    }
 }
 
