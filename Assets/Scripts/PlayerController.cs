@@ -43,6 +43,10 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(focalPoint.transform.forward * moveVertical * speed * Time.deltaTime);
         }
+        else
+        {
+            rb.AddForce(focalPoint.transform.forward * (moveVertical /5) * speed * Time.deltaTime);
+        }
     }
     void Update()
     {

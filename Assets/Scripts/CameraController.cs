@@ -6,21 +6,21 @@ public class CameraController : MonoBehaviour
 {
 
     public Transform player;
-    public float turnSpeed = 4.0f;
+    public Transform focalPoint;
+    public Transform Maincamera;
 
-    private Vector3 offset;
     // Start is called before the first frame update
     void Start()
     {
-        offset = new Vector3( 4.0f, 3.5f, 3.0f);
+        
 
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        offset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offset;
-        transform.position = (player.position + offset);
-        transform.LookAt(player.position);
+        focalPoint.position = player.position;
     }
+
+    
 }
