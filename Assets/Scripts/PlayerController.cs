@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
         if (isGrounded)
         {
